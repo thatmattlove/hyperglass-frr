@@ -13,10 +13,13 @@ app = Flask(__name__)
 @app.route("/frr", methods=["POST"])
 def frr():
     headers = request.headers
+    logger.debug(f"Headers: {headers}")
     auth = headers.get("X-Api-Key")
     if auth == "test1234":
         query_json = request.get_json()
+        logger.debug(f"query_json: {query_json}")
         query = json.loads(query_json)
+        logger.debug(f"query: {query}")
         try:
             frr_response = execute.execute(query)
             frr_output = frr_response[0]
