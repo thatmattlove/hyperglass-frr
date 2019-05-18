@@ -3,6 +3,7 @@
 import os
 import sys
 import json
+from logzero import logger
 from flask import Flask, request, Response, jsonify, flash
 
 import execute
