@@ -5,8 +5,8 @@ import sys
 import json
 from logzero import logger
 
+
 def execute(query):
-    logger.debug(query)
     cmd = str(query["command"])
     logger.debug(cmd)
     try:
@@ -14,7 +14,3 @@ def execute(query):
         return frr_output, 200
     except:
         raise
-
-
-# if __name__ == '__main__':
-#    execute('vtysh -c "show bgp ipv4 unicast 1.1.1.0/24"')
