@@ -1,20 +1,7 @@
 #!/usr/bin/env python3
 
-# import os
-# import sys
-# import json
 import subprocess
 from logzero import logger
-
-
-# def execute(query):
-#     cmd = str(query["command"])
-#     logger.debug(cmd)
-#     try:
-#         frr_output = os.system(cmd)
-#         return frr_output, 200
-#     except:
-#         raise
 
 
 def frr_bgp_route(afi, target):
@@ -54,29 +41,24 @@ def linux_ping(query):
         output = subprocess.check_output(["ping", "-6", "-c", "5", target])
         return output
 
+
 def linux_traceroute(query):
     logger.debug(f"Traceroute Query: {query}")
     afi = query["afi"]
     target = query["target"]
     if afi == "ipv4":
-        output = subprocess.check_output(["traceroute", "-4", "-n", "-w", "1", "-q", "2", "-A", target])
+        output = subprocess.check_output(
+            ["traceroute", "-4", "-n", "-w", "1", "-q", "2", "-A", target]
+        )
         return output
     elif afi == "ipv6":
-        output = subprocess.check_output(["traceroute", "-6", "-n", "-w", "1", "-q", "2", "-A", target])
+        output = subprocess.check_output(
+            ["traceroute", "-6", "-n", "-w", "1", "-q", "2", "-A", target]
+        )
         return output
 
 
 def execute(query):
-    """
-    bgp_route format:
-    {'cmd': 'bgp_route', 'afi': 'ipv4', 'target': '1.1.1.0/24'}
-
-    bgp_community & bgp_aspath format:
-    {'cmd': 'bgp_community', 'target': '14525:5000'}
-
-    ping & traceroute format:
-    {'cmd': 'ping', 'afi': 'ipv4', 'target': '1.1.1.1'}
-    """
     cmd = query["cmd"]
     if cmd in ["bgp_route"]:
         try:
