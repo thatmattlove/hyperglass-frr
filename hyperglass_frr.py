@@ -24,7 +24,7 @@ def frr():
             frr_output = frr_response[0]
             frr_status = frr_response[1]
             if frr_status == 200:
-                return jsonify(frr_output), frr_status
+                return Response(frr_output, frr_status)
             else:
                 return jsonify({"message": "Error: Not Found"}), 404
         except:

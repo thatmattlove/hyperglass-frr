@@ -17,36 +17,86 @@ from logzero import logger
 #         raise
 
 
-def frr(target):
-    logger.debug(target)
-    command = subprocess.check_output(["vtysh", "-c", target])
-    logger.debug(command)
-    return command
+def frr_bgp_route(afi, target):
+    logger.debug(f"AFI: {afi}")
+    logger.debug(f"Target: {target}")
+    command = f"show bgp {afi} unicast {target}"
+    frr_output = subprocess.check_output(["vtysh", "-c", command])
+    logger.debug(frr_output)
+    return frr_output
 
 
-def connectivity(target):
-    logger.debug(target)
-    target_args = target.split(" ")
-    command = subprocess.check_output(target_args)
-    logger.debug(command)
-    return command
+def frr_bgp_dualstack(query):
+    cmd = query["cmd"]
+    target = query["target"]
+    logger.debug(f"Command: {cmd}")
+    logger.debug(f"Target: {target}")
+    if cmd == "bgp_community":
+        command4 = f"show bgp ipv4 unicast community {target}"
+        command6 = f"show bgp ipv6 unicast community {target}"
+        frr_output = subprocess.check_output(["vtysh", "-c", command4, "-c", command6])
+        return frr_output
+    elif cmd == "bgp_aspath":
+        command4 = f"show bgp ipv4 unicast regexp {target}"
+        command6 = f"show bgp ipv6 unicast regexp {target}"
+        frr_output = subprocess.check_output(["vtysh", "-c", command4, "-c", command6])
+        return frr_output
+
+
+def linux_ping(query):
+    logger.debug(f"Ping Query: {query}")
+    afi = query["afi"]
+    target = query["target"]
+    if afi == "ipv4":
+        output = subprocess.check_output(["ping", "-4", "-c", "5", target])
+        return output
+    elif afi == "ipv6":
+        output = subprocess.check_output(["ping", "-6", "-c", "5", target])
+        return output
+
+def linux_traceroute(query):
+    logger.debug(f"Traceroute Query: {query}")
+    afi = query["afi"]
+    target = query["target"]
+    if afi == "ipv4":
+        output = subprocess.check_output(["traceroute", "-4", "-n", "-w", "1", "-q", "2", "-A", target])
+        return output
+    elif afi == "ipv6":
+        output = subprocess.check_output(["traceroute", "-6", "-n", "-w", "1", "-q", "2", "-A", target])
+        return output
 
 
 def execute(query):
     """
-    Format:
-    {'cmd': 'bgp_route', 'target': '1.1.1.0/24'}
+    bgp_route format:
+    {'cmd': 'bgp_route', 'afi': 'ipv4', 'target': '1.1.1.0/24'}
+
+    bgp_community & bgp_aspath format:
+    {'cmd': 'bgp_community', 'target': '14525:5000'}
+
+    ping & traceroute format:
+    {'cmd': 'ping', 'afi': 'ipv4', 'target': '1.1.1.1'}
     """
     cmd = query["cmd"]
-    target = query["target"]
-    if cmd in ["bgp_route", "bgp_aspath", "bgp_community"]:
+    if cmd in ["bgp_route"]:
         try:
-            return frr(target), 200
+            return frr_bgp_route(query["afi"], query["target"]), 200
         except:
             raise
-            return f"Error running FRRouting command: {target}", 501
-    elif cmd in ["ping", "traceroute"]:
+            return f"Error running FRRouting command: {query}", 501
+    elif cmd in ["bgp_community", "bgp_aspath"]:
         try:
-            return connectivity(target), 200
+            return frr_bgp_dualstack(query), 200
         except:
-            return f"Error running command: {target}", 501
+            raise
+            return f"Error running FRRouting command: {query}", 501
+    elif cmd in ["ping"]:
+        try:
+            return linux_ping(query), 200
+        except:
+            return f"Error: {query}", 501
+    elif cmd in ["traceroute"]:
+        try:
+            return linux_traceroute(query), 200
+        except:
+            return f"Error: {query}", 501
