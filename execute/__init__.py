@@ -31,12 +31,12 @@ def linux_ping(query):
     target = query["target"]
     if afi == "ipv4":
         output = subprocess.check_output(
-            ["ping", "-4", "-c", "5", "-i", source, target]
+            ["ping", "-4", "-c", "5", "-I", source, target]
         )
         return output
     elif afi == "ipv6":
         output = subprocess.check_output(
-            ["ping", "-6", "-c", "5", "-i", source, target]
+            ["ping", "-6", "-c", "5", "-I", source, target]
         )
         return output
 
