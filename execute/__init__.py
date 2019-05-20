@@ -5,19 +5,14 @@ from logzero import logger
 
 
 def frr_bgp_route(afi, target):
-    logger.debug(f"AFI: {afi}")
-    logger.debug(f"Target: {target}")
     command = f"show bgp {afi} unicast {target}"
     frr_output = subprocess.check_output(["vtysh", "-c", command])
-    logger.debug(frr_output)
     return frr_output
 
 
 def frr_bgp_dualstack(query):
     cmd = query["cmd"]
     target = query["target"]
-    logger.debug(f"Command: {cmd}")
-    logger.debug(f"Target: {target}")
     if cmd == "bgp_community":
         command4 = f"show bgp ipv4 unicast community {target}"
         command6 = f"show bgp ipv6 unicast community {target}"
@@ -31,7 +26,6 @@ def frr_bgp_dualstack(query):
 
 
 def linux_ping(query):
-    logger.debug(f"Ping Query: {query}")
     afi = query["afi"]
     target = query["target"]
     if afi == "ipv4":
@@ -43,7 +37,6 @@ def linux_ping(query):
 
 
 def linux_traceroute(query):
-    logger.debug(f"Traceroute Query: {query}")
     afi = query["afi"]
     target = query["target"]
     if afi == "ipv4":
@@ -59,6 +52,7 @@ def linux_traceroute(query):
 
 
 def execute(query):
+    query_type = type(query)
     cmd = query["cmd"]
     if cmd in ["bgp_route"]:
         try:

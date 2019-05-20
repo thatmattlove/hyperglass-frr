@@ -14,7 +14,7 @@ def main():
 @main.command()
 def testserver():
     try:
-        hyperglass_frr.app.run(host="0.0.0.0", debug=True, port=5000)
+        hyperglass_frr.app.run(host="0.0.0.0", debug=True, port=80)
         logger.error("Started test server.")
     except:
         logger.error("Failed to start test server.")

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import json
 from logzero import logger
 from flask import Flask, request, Response, jsonify, flash
 
@@ -11,11 +12,10 @@ app = Flask(__name__)
 @app.route("/frr", methods=["POST"])
 def frr():
     headers = request.headers
-    logger.debug(f"Headers: {headers}")
     auth = headers.get("X-Api-Key")
     if auth == "test1234":
-        query = request.get_json()
-        logger.debug(f"query: {query}")
+        query_string = request.get_json()
+        query = json.loads(query_string)
         try:
             frr_response = execute.execute(query)
             frr_output = frr_response[0]
