@@ -27,26 +27,32 @@ def frr_bgp_dualstack(query):
 
 def linux_ping(query):
     afi = query["afi"]
+    source = query["source"]
     target = query["target"]
     if afi == "ipv4":
-        output = subprocess.check_output(["ping", "-4", "-c", "5", target])
+        output = subprocess.check_output(
+            ["ping", "-4", "-c", "5", "-i", source, target]
+        )
         return output
     elif afi == "ipv6":
-        output = subprocess.check_output(["ping", "-6", "-c", "5", target])
+        output = subprocess.check_output(
+            ["ping", "-6", "-c", "5", "-i", source, target]
+        )
         return output
 
 
 def linux_traceroute(query):
     afi = query["afi"]
+    source = query["source"]
     target = query["target"]
     if afi == "ipv4":
         output = subprocess.check_output(
-            ["traceroute", "-4", "-n", "-w", "1", "-q", "2", "-A", target]
+            ["traceroute", "-4", "-n", "-w", "1", "-q", "2", "-A", "-s", source, target]
         )
         return output
     elif afi == "ipv6":
         output = subprocess.check_output(
-            ["traceroute", "-6", "-n", "-w", "1", "-q", "2", "-A", target]
+            ["traceroute", "-6", "-n", "-w", "1", "-q", "2", "-A", "-s", source, target]
         )
         return output
 
