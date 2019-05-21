@@ -11,6 +11,7 @@ import execute
 
 app = Flask(__name__)
 
+api_listen_addr = getattr(configuration, "api_listen_addr", "*")
 api_port = getattr(configuration, "api_port", 8080)
 api_key_hash = getattr(configuration, "api_key_hash")
 
@@ -34,4 +35,4 @@ def frr():
 
 
 if __name__ == "__main__":
-    serve(app, host="*", port=api_port)
+    serve(app, host=api_listen_addr, port=api_port)
