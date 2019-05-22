@@ -20,10 +20,12 @@ api_key_hash = getattr(configuration, "api_key_hash")
 def frr():
     headers = request.headers
     auth = headers.get("X-Api-Key")
+    auth_type = type(auth)
     if pbkdf2_sha256.verify(auth, api_key_hash) is True:
-        query_string = request.get_json()
-        query = json.loads(query_string)
         try:
+            logger.debug(f"Validation of API key passed. Hash: {api_key_hash}")
+            query_json = request.get_json()
+            query = json.loads(query_json)
             frr_response = execute.execute(query)
             frr_output = frr_response[0]
             frr_status = frr_response[1]
@@ -31,6 +33,7 @@ def frr():
         except:
             raise
     else:
+        logger.error(f"Validation of API key failed. Hash: {api_key_hash}")
         return jsonify({"message": "Error: Unauthorized"}), 401
 
 
