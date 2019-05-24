@@ -16,12 +16,16 @@ def frr_bgp_dualstack(query):
     if cmd == "bgp_community":
         command4 = f"show bgp ipv4 unicast community {target}"
         command6 = f"show bgp ipv6 unicast community {target}"
-        frr_output = subprocess.check_output(["vtysh", "-u", "-c", command4, "-c", command6])
+        frr_output = subprocess.check_output(
+            ["vtysh", "-u", "-c", command4, "-c", command6]
+        )
         return frr_output
     elif cmd == "bgp_aspath":
         command4 = f"show bgp ipv4 unicast regexp {target}"
         command6 = f"show bgp ipv6 unicast regexp {target}"
-        frr_output = subprocess.check_output(["vtysh", "-u", "-c", command4, "-c", command6])
+        frr_output = subprocess.check_output(
+            ["vtysh", "-u", "-c", command4, "-c", command6]
+        )
         return frr_output
 
 
@@ -47,12 +51,12 @@ def linux_traceroute(query):
     target = query["target"]
     if afi == "ipv4":
         output = subprocess.check_output(
-            ["traceroute", "-4", "-n", "-w", "1", "-q", "2", "-A", "-s", source, target]
+            ["traceroute", "-4", "-n", "-w", "1", "-q", "2", "-s", source, target]
         )
         return output
     elif afi == "ipv6":
         output = subprocess.check_output(
-            ["traceroute", "-6", "-n", "-w", "1", "-q", "2", "-A", "-s", source, target]
+            ["traceroute", "-6", "-n", "-w", "1", "-q", "2", "-s", source, target]
         )
         return output
 
