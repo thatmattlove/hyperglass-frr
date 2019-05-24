@@ -13,15 +13,14 @@ app = Flask(__name__)
 
 api_listen_addr = getattr(configuration, "api_listen_addr", "*")
 api_port = getattr(configuration, "api_port", 8080)
-api_key_hash = getattr(configuration, "api_key_hash")
+api_key = getattr(configuration, "api_key")
 
 
 @app.route("/frr", methods=["POST"])
 def frr():
     headers = request.headers
-    auth = headers.get("X-Api-Key")
-    auth_type = type(auth)
-    if pbkdf2_sha256.verify(auth, api_key_hash) is True:
+    api_key_hash = headers.get("X-Api-Key")
+    if pbkdf2_sha256.verify(api_key, api_key_hash) is True:
         try:
             logger.debug(f"Validation of API key passed. Hash: {api_key_hash}")
             query_json = request.get_json()
