@@ -51,12 +51,12 @@ def linux_traceroute(query):
     target = query["target"]
     if afi == "ipv4":
         output = subprocess.check_output(
-            ["traceroute", "-4", "-n", "-w", "1", "-q", "2", "-s", source, target]
+            ["traceroute", "-4", "-w", "1", "-q", "1", "-s", source, target]
         )
         return output
     elif afi == "ipv6":
         output = subprocess.check_output(
-            ["traceroute", "-6", "-n", "-w", "1", "-q", "2", "-s", source, target]
+            ["traceroute", "-6", "-w", "1", "-q", "1", "-s", source, target]
         )
         return output
 
