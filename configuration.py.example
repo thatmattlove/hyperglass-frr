@@ -7,4 +7,4 @@ api_listen_addr = "*"
 api_port = 8080
 
 # Fill in API Key Hash from `manage.py generatekey`
-api_key_hash = ""
+api_key = ""
