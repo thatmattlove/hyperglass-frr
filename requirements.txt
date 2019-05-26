@@ -2,3 +2,4 @@ click
 logzero
 flask
 waitress
+passlib
