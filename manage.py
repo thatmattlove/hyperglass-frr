@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
-
-import os
-import sys
 import click
 import random
 import string
 from logzero import logger
 from passlib.hash import pbkdf2_sha256
 
-import hyperglass_frr
+from hyperglass_frr import hyperglass_frr
 
 
 @click.group()
@@ -19,7 +16,7 @@ def main():
 @main.command()
 def testserver():
     try:
-        hyperglass_frr.app.run(host="0.0.0.0", debug=True, port=80)
+        hyperglass_frr.app.run(host="0.0.0.0", debug=True, port=8080)
         logger.error("Started test server.")
     except:
         logger.error("Failed to start test server.")

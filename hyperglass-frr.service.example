@@ -3,10 +3,10 @@ Description=Hyperglass FRR API
 After=network.target
 
 [Service]
-User=hyperglass-frr-api
-Group=hyperglass-frr-api
+User=hyperglass-frr
+Group=hyperglass-frr
 WorkingDirectory=/opt/hyperglass-frr
-ExecStart=/usr/bin/env python3 /opt/hyperglass-frr/hyperglass_frr.py
+ExecStart=/usr/bin/python3 /opt/hyperglass-frr/hyperglass_frr.py
 
 [Install]
 WantedBy=multi-user.target

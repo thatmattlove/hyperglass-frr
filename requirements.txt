@@ -1,5 +1,6 @@
+toml
 click
-logzero
 flask
-waitress
+logzero
 passlib
+waitress
