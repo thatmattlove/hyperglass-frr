@@ -4,7 +4,7 @@ hyperglass-frr is a restful API for the FRRouting stack, for use by [Hyperglass]
 
 ```json
 {
-  "cmd": "ping",
+  "query_type": "ping",
   "afi": "ipv4",
   "source": "192.0.2.1",
   "target": "1.1.1.1"
@@ -15,7 +15,7 @@ Would construct (by default) `ping -4 -c 5 -I 192.0.2.1 1.1.1.1`, execute the co
 
 ```json
 {
-  "cmd": "bgp_route",
+  "query_type": "bgp_route",
   "afi": "ipv6",
   "target": "2606:4700:4700::/48"
 }
@@ -115,7 +115,7 @@ hyperglass-frr should now be active, and you can run a simple test to verify tha
 ```python
 import json
 import requests
-query = '{"cmd": "bgp_route", "afi": "ipv4", "target": "1.1.1.0/24"}'
+query = '{"query_type": "bgp_route", "afi": "ipv4", "target": "1.1.1.0/24"}'
 query_json = json.dumps(query)
 headers = {'Content-Type': 'application/json', 'X-API-Key': '$pbkdf2-sha256$29000$m9M6R.j9HwMgJGRs7f0/Jw$5HERwfOIn3P0U/M9t5t04SmgRmTzk3435Lr0duqz07w'}
 url = "http://192.168.15.130:8080/frr"
