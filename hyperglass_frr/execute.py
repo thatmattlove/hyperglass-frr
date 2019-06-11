@@ -1,26 +1,40 @@
 """
 Execute the constructed command
 """
-# Module Imports
+# Standard Imports
+import logging
 import subprocess
+
+# Module Imports
+import logzero
 from logzero import logger
 
 # Project Imports
 from hyperglass_frr import configuration
 
+# Logzero Configuration
+if configuration.debug_state():
+    logzero.loglevel(logging.DEBUG)
+else:
+    logzero.loglevel(logging.INFO)
+
 
 def execute(query):
     """Gets constructed command string and runs the command via subprocess"""
-    cmd = query.get("cmd")
+    logger.debug(f"Received query: {query}")
+    query_type = query.get("query_type")
     try:
-        c = configuration.command(query)
-        if cmd in ["bgp_route", "bgp_community", "bgp_aspath"]:
-            output = subprocess.check_output(c.vtysh())
-            return (output, 200)
-        if cmd in ["ping", "traceroute"]:
-            output = subprocess.check_output(c.is_split())
-            return (output, 200)
-    except subprocess.CalledProcessError as e:
-        msg = "Error running query for %s. Error: %s" % (query, e)
-        logger.error(msg)
-    return (msg, 501)
+        command = configuration.Command(query)
+        if query_type in ["bgp_route", "bgp_community", "bgp_aspath"]:
+            logger.debug(f'Running vtysh command "{command}"')
+            output = subprocess.check_output(command.vtysh())
+            status = 200
+        if query_type in ["ping", "traceroute"]:
+            logger.debug(f'Running bash command "{command}"')
+            output = subprocess.check_output(command.is_split())
+            status = 200
+    except subprocess.CalledProcessError as error_exception:
+        output = f"Error running query for {query}."
+        status = 500
+        logger.error(f"Error running query for {query}. Error:\n{error_exception}")
+    return (output, status)
