@@ -49,31 +49,56 @@ class Command:
         self.afi = query.get("afi")
         self.source = query.get("source")
         self.target = query.get("target", 0)
-        raw_command = conf["commands"][self.afi].get(self.query_type)
-        self.command = raw_command.format(source=self.source, target=self.target)
         logger.debug(
             f"Command class initialized with paramaters:\nQuery Type: {self.query_type}\nAFI: \
-            {self.afi}\nSource: {self.source}\nTarget: {self.target}\nConstructed command: \
-            {self.command}"
+            {self.afi}\nSource: {self.source}\nTarget: {self.target}"
         )
 
     def is_string(self):
         """Returns command as single string"""
-        command_string = self.command
+        command_string = (
+            conf["commands"][self.afi]
+            .get(self.query_type)
+            .format(source=self.source, target=self.target)
+        )
         logger.debug(f"Constructed command as string: {command_string}")
         return command_string
 
     def is_split(self):
         """Returns bash command as a list of arguments"""
-        command_split = self.command.split(" ")
+        command_string = (
+            conf["commands"][self.afi]
+            .get(self.query_type)
+            .format(source=self.source, target=self.target)
+        )
+        command_split = command_string.split(" ")
         logger.debug(f"Constructed bash command as list: {command_split}")
         return command_split
 
     def vtysh(self):
-        """Returns bash command as a list of arguments, with the vtysh command itself as a \
-        separate list element"""
-        vtysh_pre = "vtysh -u -c".split(" ")
+        """Returns bash command as a list of arguments, with the vtysh commands as separate list \
+        elements"""
+        vtysh_pre = ["vtysh", "-u"]
+        vtysh_c = "-c"
         logger.debug(f"vtysh command & argument list: {vtysh_pre}")
-        vtysh_pre.append(self.command)
+        command = None
+        if not self.afi == "dual":
+            command = [
+                vtysh_c,
+                (
+                    conf["commands"][self.afi]
+                    .get(self.query_type)
+                    .format(source=self.source, target=self.target)
+                ),
+            ]
+        if self.afi == "dual":
+            command_ipv4 = conf["commands"]["ipv4"].get(self.query_type)
+            command_ipv6 = conf["commands"]["ipv6"].get(self.query_type)
+
+            logger.debug(f"Constructed IPv4 command: {command_ipv4}")
+            logger.debug(f"Constructed IPv6 command: {command_ipv6}")
+
+            command = [vtysh_c, command_ipv4, vtysh_c, command_ipv6]
+        vtysh_command = vtysh_pre + command
         logger.debug(f"vtysh command & argument list with command: {vtysh_pre}")
-        return vtysh_pre
+        return vtysh_command
