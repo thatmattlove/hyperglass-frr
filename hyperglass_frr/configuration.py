@@ -92,8 +92,16 @@ class Command:
                 ),
             ]
         if self.afi == "dual":
-            command_ipv4 = conf["commands"]["ipv4"].get(self.query_type)
-            command_ipv6 = conf["commands"]["ipv6"].get(self.query_type)
+            command_ipv4 = (
+                conf["commands"]["ipv4"]
+                .get(self.query_type)
+                .format(source=self.source, target=self.target)
+            )
+            command_ipv6 = (
+                conf["commands"]["ipv6"]
+                .get(self.query_type)
+                .format(source=self.source, target=self.target)
+            )
 
             logger.debug(f"Constructed IPv4 command: {command_ipv4}")
             logger.debug(f"Constructed IPv6 command: {command_ipv6}")
