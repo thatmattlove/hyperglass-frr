@@ -1,6 +1,6 @@
 # hyperglass-frr
 
-hyperglass-frr is a restful API for the FRRouting stack, for use by [Hyperglass](https://github.com/checktheroads/hyperglass). hyperglass-frr ingests a HTTP POST with JSON data and constructs 1 of 5 shell commands to run based on the passed parameters. For example:
+hyperglass-frr is a restful API for the FRRouting stack, for use by [hyperglass](https://github.com/checktheroads/hyperglass). hyperglass-frr ingests a HTTP POST with JSON data and constructs 1 of 5 shell commands to run based on the passed parameters. For example:
 
 ```json
 {
@@ -62,7 +62,7 @@ Your API Key is: B3K1ckWUpwNyFU1F
 Your Key Hash is: $pbkdf2-sha256$29000$9T5njNFaS6lVag1B6H2vFQ$mLEbQD5kOAgjfZZ1zEVlrke6wE8vBEHzK.zI.7MOAVo
 ```
 
-Copy the API Key, in this example `B3K1ckWUpwNyFU1F` and add it to your configuration.toml:
+Copy the API Key, in this example `B3K1ckWUpwNyFU1F` and add it to `configuration.toml`:
 
 ```toml
 [api]
@@ -80,7 +80,7 @@ port = 8001
 key = "B3K1ckWUpwNyFU1F"
 ```
 
-In Hyperglass, configure `devices.toml` to use the Key Hash (in this example `$pbkdf2-sha256$29000$9T5njNFaS6lVag1B6H2vFQ$mLEbQD5kOAgjfZZ1zEVlrke6wE8vBEHzK.zI.7MOAVo`) as your FRRouting device's password:
+In hyperglass, configure `devices.toml` to use the Key Hash (in this example `$pbkdf2-sha256$29000$9T5njNFaS6lVag1B6H2vFQ$mLEbQD5kOAgjfZZ1zEVlrke6wE8vBEHzK.zI.7MOAVo`) as your FRRouting device's password:
 
 ```toml
 [router.'router1']
