@@ -27,12 +27,24 @@ def dev_server(host, port):
         raise
 
 
-@main.command()
-def generatekey(string_length=16):
+@main.command("generate-key", help="Generate API key & hash")
+@click.option(
+    "-l", "--length", "string_length", type=int, default=16, show_default=True
+)
+def generatekey(string_length):
+    """Generates 16 character API Key for hyperglass-frr API, and a corresponding PBKDF2 SHA256 Hash"""
     ld = string.ascii_letters + string.digits
     api_key = "".join(random.choice(ld) for i in range(string_length))
     key_hash = pbkdf2_sha256.hash(api_key)
-    click.echo(f"Your API Key is: {api_key}\nYour Key Hash is: {key_hash}")
+    click.secho(
+        f"""
+Your API Key is: {api_key}
+Place your API Key in the `configuration.toml` of your API module. For example, in: `hyperglass-frr/hyperglass_frr/configuration.toml`
+
+Your Key Hash is: {key_hash}
+Use this hash as the password for the device using the API module. For example, in: `hyperglass/hyperglass/configuration/devices.toml`
+"""
+    )
 
 
 if __name__ == "__main__":
