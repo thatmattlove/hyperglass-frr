@@ -1,6 +1,6 @@
 # hyperglass-frr
 
-hyperglass-frr is a restful API for the FRRouting stack, for use by [hyperglass](https://github.com/checktheroads/hyperglass). hyperglass-frr ingests a HTTP POST with JSON data and constructs 1 of 5 shell commands to run based on the passed parameters. For example:
+hyperglass-frr is a restful API for the FRRouting stack, for use by [hyperglass](https://github.com/checktheroads/hyperglass). hyperglass-frr ingests a HTTP POST request with JSON data and constructs 1 of 5 shell commands to run based on the passed parameters. For example:
 
 ```json
 {
@@ -90,7 +90,6 @@ src_addr_ipv4 = "192.0.2.1"
 src_addr_ipv6 = "2001:db8::1"
 credential = "frr_api_router1"
 location = "pop1"
-name = "router1.pop1"
 display_name = "POP 1"
 port = "8080"
 type = "frr"
