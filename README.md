@@ -1,6 +1,6 @@
 # hyperglass-frr
 
-hyperglass-frr is a restful API for the FRRouting stack, for use by [hyperglass](https://github.com/checktheroads/hyperglass). hyperglass-frr ingests a HTTP POST request with JSON data and constructs 1 of 5 shell commands to run based on the passed parameters. For example:
+hyperglass-frr is a restful API for the [Free Range Routing](https://frrouting.org/) stack, for use by [hyperglass](https://github.com/checktheroads/hyperglass). hyperglass-frr ingests a HTTP POST request with JSON data and constructs 1 of 5 shell commands to run based on the passed parameters. For example:
 
 ```json
 {
@@ -57,7 +57,7 @@ $ pip3 install -r requirements.txt
 ### Generate API Key
 ```console
 $ cd /opt/hyperglass-frr
-$ python3 manage.py generatekey
+$ python3 manage.py generate-key
 Your API Key is: B3K1ckWUpwNyFU1F
 Your Key Hash is: $pbkdf2-sha256$29000$9T5njNFaS6lVag1B6H2vFQ$mLEbQD5kOAgjfZZ1zEVlrke6wE8vBEHzK.zI.7MOAVo
 ```
