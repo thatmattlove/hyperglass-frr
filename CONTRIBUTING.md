@@ -1,0 +1,1 @@
+hyperglass-frr follows the same contributing standards as [hyperglass](https://github.com/checktheroads/hyperglass). Please review the [hyperglass contributing guidelines](https://github.com/checktheroads/hyperglass/blob/master/CONTRIBUTING.md) prior to contributing to hyperglass-frr.
