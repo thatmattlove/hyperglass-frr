@@ -1,3 +1,7 @@
+# This repository is no longer maintained
+
+hyperglass-frr was originally created for [hyperglass v0](https://github.com/checktheroads/hyperglass/tree/v0), which is being migrated to [hyperglass v1.0](https://github.com/checktheroads/hyperglass). If you're using FRR with hyperglass v1.0, please use [**hyperglass-agent**](https://github.com/checktheroads/hyperglass-agent).
+
 # hyperglass-frr
 
 hyperglass-frr is a restful API for the [Free Range Routing](https://frrouting.org/) stack, for use by [hyperglass](https://github.com/checktheroads/hyperglass). hyperglass-frr ingests a HTTP POST request with JSON data and constructs 1 of 5 shell commands to run based on the passed parameters. For example:
