@@ -2,6 +2,7 @@
 Execute the constructed command
 """
 # Standard Imports
+import re
 import logging
 import subprocess
 
@@ -24,6 +25,13 @@ def execute(query):
     logger.debug(f"Received query: {query}")
     query_type = query.get("query_type")
     try:
+        if query_type in ["bgp_community"]:
+            target = query.get("target")
+            logger.debug(f'{query_type}: Check for large community {target}')
+            if re.match("^([0-9]{1,10})\:([0-9]{1,10})\:[0-9]{1,10}$", target):
+                logger.debug(f'Large community detected.')
+                query["query_type"] = "bgp_large_community"
+
         command = configuration.Command(query)
         if query_type in ["bgp_route", "bgp_community", "bgp_aspath"]:
             logger.debug(f'Running vtysh command "{command}"')
@@ -36,5 +44,5 @@ def execute(query):
     except subprocess.CalledProcessError as error_exception:
         output = f'Unable to reach {query["target"]}.'
         status = 504
-        logger.debug(f"{output} Error:\n{ping_error}")
+        logger.debug(f"{output} Ping error:\n")
     return (output, status)
